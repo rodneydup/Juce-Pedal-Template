@@ -1,12 +1,12 @@
-# KitchenSinc
+# JUCE-Pedal-Template
 
-## Everything *including* the kitch sink
-
-This project will serve as a container full of random things made with JUCE. Anything can be added to the project. Nothing should be removed. It should become a monstrosity.
+Taken from Aaron Anderson, who did all the tedious CMake work to make this compile painlessly.
 
 ## Building
 
-I have set this to work with cmake/make on Ubuntu, both cmake and make *should* work on mac too. It uses Juce 6 and pedal, both are submodules.
+works with cmake/make on Ubuntu, both cmake and make *should* work on mac too. It uses Juce 6 and pedal, both are submodules.
+
+NOTE: it seems that Cmake 3.15 or newer is needed.
 
 To clone the kitchen sinc repository, open terminal:
 
