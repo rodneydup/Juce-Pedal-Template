@@ -1,10 +1,16 @@
 # JUCE-Pedal-Template
 
-Taken from Aaron Anderson, who did all the tedious CMake work to make this compile painlessly.
+A template repo for JUCE/Pedal projects. Taken from Aaron Anderson, who did all the tedious CMake work to make this compile painlessly.
+
+NOTE: after generating a new git repo from this template, submodules aren't brought in for some reason, so you'll have to run:
+```
+git submodule add https://github.com/aaronaanderson/pedal.git
+git submodule add https://github.com/juce-framework/JUCE.git
+```
 
 ## Building
 
-works with cmake/make on Ubuntu, both cmake and make *should* work on mac too. It uses Juce 6 and pedal, both are submodules.
+Works with cmake/make on Ubuntu, both cmake and make *should* work on mac too. It uses Juce 6 and pedal, both are submodules.
 
 NOTE: it seems that Cmake 3.15 or newer is needed.
 
