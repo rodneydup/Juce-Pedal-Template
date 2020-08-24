@@ -1,4 +1,4 @@
-# KitchenSinc CMakeLists.txt
+# PRISM-Dilate CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.12)
 
@@ -6,7 +6,10 @@ cmake_minimum_required(VERSION 3.12)
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(KITCHEN_SINC_APP VERSION 0.0.1)
+# !!! Change this to set the name of your app
+set(APP_NAME Juce-Pedal-Template)
+
+project(${APP_NAME}_APP VERSION 0.0.1)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -23,13 +26,13 @@ project(KITCHEN_SINC_APP VERSION 0.0.1)
 # juce_set_vst2_sdk_path(...)
 
 #Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
-juce_add_gui_app(KitchSinc
+juce_add_gui_app(${APP_NAME}
     # VERSION ...                       # Set this if the app version is different to the project version
     # ICON_BIG ...                      # ICON_* arguments specify a path to an image file to use as an icon
     # ICON_SMALL ...
     # DOCUMENT_EXTENSIONS ...           # Specify file extensions that should be associated with this app
     # COMPANY_NAME ...                  # Specify the name of the app's author
-    PRODUCT_NAME "Kitchen-Sinc")     # The name of the final executable, which can differ from the target name
+    PRODUCT_NAME "${APP_NAME}")     # The name of the final executable, which can differ from the target name
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
 # into your build tree. This should be included with `#include <JuceHeader.h>`. The include path for
@@ -37,7 +40,7 @@ juce_add_gui_app(KitchSinc
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-# juce_generate_juce_header(KitchSinc)
+# juce_generate_juce_header(${APP_NAME})
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources (PRIVATE is normally best practice,
@@ -47,9 +50,10 @@ juce_add_gui_app(KitchSinc
 #compile pedal
 add_subdirectory(pedal)
 
-target_sources(KitchSinc PRIVATE
-    Main.cpp
-    MainComponent.cpp)
+# !!! Add any new cpp files you make here
+target_sources(${APP_NAME} PRIVATE
+    src/Main.cpp
+    src/MainComponent.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -58,12 +62,14 @@ target_sources(KitchSinc PRIVATE
 # definitions will be visible both to your code, and also the JUCE module code, so for new
 # definitions, pick unique names that are unlikely to collide! This is a standard CMake command.
 
-target_compile_definitions(KitchSinc PRIVATE
+target_compile_definitions(${APP_NAME} PRIVATE
     # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
     JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
     JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-    JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:KitchSinc,JUCE_PROJECT_NAME>"
-    JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:KitchSinc,JUCE_VERSION>")
+    JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:${APP_NAME},JUCE_PROJECT_NAME>"
+    JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:${APP_NAME},JUCE_VERSION>"
+    JUCE_JACK=1
+    )
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional
@@ -80,10 +86,21 @@ target_compile_definitions(KitchSinc PRIVATE
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
-target_link_libraries(KitchSinc PRIVATE
+target_link_libraries(${APP_NAME} PRIVATE
     # GuiAppData            # If we'd created a binary data target, we'd link to it here
     pedal
     juce::juce_gui_basics
     juce::juce_audio_devices
     juce::juce_audio_utils
     juce::juce_gui_extra)
+
+# This puts binaries into the ./bin directory
+set_target_properties(${APP_NAME} PROPERTIES
+BUILD_WITH_INSTALL_RPATH 1
+INSTALL_NAME_DIR "@rpath"
+CXX_STANDARD 14
+CXX_STANDARD_REQUIRED ON
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin
+RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_LIST_DIR}/bin
+RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_LIST_DIR}/bin
+)
